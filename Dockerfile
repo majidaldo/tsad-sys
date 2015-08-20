@@ -67,6 +67,9 @@ RUN if [ "$DRIVER_VER" != "CUDA" ]; then curl  http://us.download.nvidia.com/XFr
 
 # Download kernel source and prepare modules
 
+#todo: this block could be moved to install_nvidia.
+#it has host OS specific instructions. so if moved
+#we can achieve 'build anywhere run one specific machine'
 WORKDIR /usr/src/kernels
 RUN curl https://www.kernel.org/pub/linux/kernel/v`uname -r | grep -o '^[0-9]'`.x/linux-`uname -r | grep -o '[0-9].[0-9].[0-9]'`.tar.xz \
     > linux.tar.xz
