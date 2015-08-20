@@ -48,6 +48,7 @@ ENV DRIVER_VER 355.06
 #different urls for differnt versions. thx nvidia!
 #if not caring about cuda
 #RUN if [ "${CUDA_VER1}" -ge 7 ] && [ "${DRIVER_VER}" = "CUDA" ]
+#todo: break up long lines  
 RUN if [ "${CUDA_VER1}" -ge 7 ] ; then curl http://developer.download.nvidia.com/compute/cuda/${CUDA_VER1}_${CUDA_VER2}/Prod/local_installers/cuda_${CUDA_VER1}.${CUDA_VER2}.${CUDA_VER3}_linux.run \
     > /opt/nvidia/cuda.run ; fi
 #RUN if [ "${CUDA_VER1}" -lt 7 ] && [ "${DRIVER_VER}" = "CUDA" ]
