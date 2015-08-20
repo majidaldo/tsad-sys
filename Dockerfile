@@ -101,8 +101,6 @@ CMD /opt/nvidia/install_nvidia
 # Common stuff
 # in case this Dockerfile is used as a base to build images
 
-ONBUILD ENV PATH=/usr/local/cuda/bin:$PATH
-ONBUILD ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
 ONBUILD WORKDIR /opt/nvidia
 ONBUILD RUN chmod +x cuda.run
 ONBUILD RUN chmod +x driver.run
@@ -114,6 +112,10 @@ ONBUILD RUN ./driver.run --silent --no-kernel-module --no-unified-memory --no-op
 #the samples take space but are a great way to chk cuda
 #you could remove --samples
 ONBUILD RUN ./cuda.run --toolkit --samples --silent
+
+# setup stuff
+ONBUILD ENV PATH=/usr/local/cuda/bin:$PATH
+ONBUILD ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
 
 ONBUILD WORKDIR /root
 ONBUILD CMD /bin/bash
