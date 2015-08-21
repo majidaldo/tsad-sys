@@ -1,27 +1,45 @@
 # CoreOS-Nvidia
-This is a Dockerfile that builds a container with nvidia GPU drivers.  Once built running the container in privileged mode will install the kernel module.
+This is a Dockerfile that builds a container with nvidia GPU drivers and CUDA.
 
-It should be built on a machine running the same CoreOS (actually 681.x.x) version as the target machine (the one with the Nvidia card installed), if not the target machine itself.  Of course the container can only be run on a machine with Nvidia hardware installed.
+It should be built on a machine running the same CoreOS version as the target machine (the one with the Nvidia card installed), if not the target machine itself.  Of course the container can only be run on a machine with Nvidia hardware installed.
 
-Note: It does not install CUDA.
+## "Installation"
 
-Based on: https://github.com/StudioPyxis/coreos-nvidia/blob/master/Dockerfile by Joshua Kolden.
-### To Build
+The purpose of the steps in this section is to load the NVIDIA drivers.
 
-    docker build -t coreos-nvidia github.com/hookenz/coreos-nvidia
+Build: `docker build -t nvidia github.com/majidaldo/coreos-nvidia`
+Run: `docker run --rm --privileged nvidia`
+You should see your NVIDIA harware printed.
+Confirm module is loaded: `lsmod | grep -i nvidia`
+You should see:
+```
+nvidia_uvm             77824  0
+nvidia               8560640  1 nvidia_uvm
+i2c_core               45056  3 i2c_i801,ipmi_ssif,nvidia
+```
 
-### To Run
+## Usage
 
-    docker run --privileged=true -t coreos-nvidia
+To make use of CUDA in a docker container, you must recreate the installation environment in the container. The Dockerfile contains instructions to recreate the environment if it is used as a base for other images (You could also just modify the Dockerfile itself or enter the installation container.). Just insert `FROM nvidia` at the beginning of your Dockerfile.
 
-To confirm the module is loaded.
+You can also use some  containerized CUDA-enabled applications built by others. As (a tested) example, you can run CUDA-enabled [Theano](https://github.com/Kaixhin/dockerfiles/blob/master/cuda-theano/cuda_v7.0/Dockerfile) if the `FROM` instruction is changed to `FROM nvidia`.
 
-    lsmod | grep -i nvidia
+After building the CUDA application image, run it passing NVIDIA devices. [This](https://gist.github.com/majidaldo/87d6a4c58df07f69b269) script will generate a device list in a format suitable for use with `docker run` options. Is also creates NVIDIA devices on the host so it has to run with escalated privileges (sudo).
+```
+docker build -t cuda-app ./cuda-app
+NV_DEVICES=$(sudo ./nvidia_devices.sh)
+docker run -ti $NV_DEVICES cuda-app
+```
 
-#### Notes
+You can start over just by removing the modules `sudo rmmod nvidia_uvm&& sudo rmmod nvidia` and building again (`rmomod` might not be necessary since the driver installation removes the older driver but I haven't checked).
 
-There may be a batter base image, and some post build cleanup that could be done to make the container smaller.
+
+## Notes
+
+There may be a better base image, and some post build cleanup that could be done to make the container smaller.
 
 Currently the build uses `uname -r` to detect the running kernel version.  There maybe be a better way to do this that offers more flexibility.
 
-Also, the driver version is hard coded (`352.21`), automatically finding the latest driver would be a nice improvement.
+
+
+todo: commentatry in my blog post
