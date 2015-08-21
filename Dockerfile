@@ -29,7 +29,7 @@ ENV DRIVER_VER 355.06
 #maybe bc driver in cuda cant install in 4.x kernel
 #ENV DRIVER_VER CUDA
 #'CUDA' means whatever driver came with CUDA
-
+#todo: make tags of format DRIVER_VER-CUDA_VERy
 
 
 RUN apt-get -y update && apt-get -y install \
