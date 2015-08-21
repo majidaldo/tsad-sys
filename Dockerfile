@@ -1,3 +1,5 @@
+## -*- docker-image-name: "nvidia" -*-
+
 FROM ubuntu:15.04
 MAINTAINER Majid alDosari
 
@@ -14,16 +16,6 @@ MAINTAINER Majid alDosari
 #for cuda 7
 ENV GCC_VER 4.8
 
-RUN apt-get -y update && apt-get -y install \
-    gcc-${GCC_VER} g++-${GCC_VER} \
-    wget curl git make dpkg-dev module-init-tools && \
-    mkdir -p /usr/src/kernels && \
-    mkdir -p /opt/nvidia && \
-    apt-get autoremove && apt-get clean
-# Ensure we're using gcc version GCC_VER
-RUN update-alternatives --install  /usr/bin/gcc gcc /usr/bin/gcc-${GCC_VER} 10
-
-
 ENV CUDA_VER1 7
 ENV CUDA_VER2 0
 ENV CUDA_VER3 28
@@ -37,6 +29,18 @@ ENV DRIVER_VER 355.06
 #maybe bc driver in cuda cant install in 4.x kernel
 #ENV DRIVER_VER CUDA
 #'CUDA' means whatever driver came with CUDA
+
+
+
+RUN apt-get -y update && apt-get -y install \
+    gcc-${GCC_VER} g++-${GCC_VER} \
+    wget curl git make dpkg-dev module-init-tools && \
+    mkdir -p /usr/src/kernels && \
+    mkdir -p /opt/nvidia && \
+    apt-get autoremove && apt-get clean
+# Ensure we're using gcc version GCC_VER
+RUN update-alternatives --install  /usr/bin/gcc gcc /usr/bin/gcc-${GCC_VER} 10
+
 
 
 # Download CUDA
