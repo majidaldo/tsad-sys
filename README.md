@@ -27,7 +27,7 @@ You can also use some  containerized CUDA-enabled applications built by others. 
 After building the CUDA application image, run it passing NVIDIA devices. [This](https://gist.github.com/majidaldo/87d6a4c58df07f69b269) script will generate a device list in a format suitable for use with `docker run` options. Is also creates NVIDIA devices on the host so it has to run with escalated privileges (sudo).
 ```
 docker build -t cuda-app ./cuda-app
-NV_DEVICES=$(sudo ./nvidia_devices.sh)
+NV_DEVICES=$(sudo ./coreos-nvidia/devices/nvidia_devices.sh)
 docker run -ti $NV_DEVICES cuda-app
 ```
 
