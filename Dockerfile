@@ -39,9 +39,10 @@ RUN apt-get -y update && apt-get -y install \
     mkdir -p /opt/nvidia && \
     apt-get autoremove && apt-get clean
 # Ensure we're using gcc version GCC_VER
-RUN update-alternatives --install  /usr/bin/gcc gcc /usr/bin/gcc-${GCC_VER} 10
-
-
+#todo: why is this here? not needed?
+#i didn't install any other compiler.
+#RUN update-alternatives --install  /usr/bin/gcc gcc /usr/bin/gcc-${GCC_VER} 10
+#RUN update-alternatives --install  /usr/bin/gcc gcc /usr/bin/gcc-${GCC_VER} 10
 
 # Download CUDA
 # downloading CUDA JUST to expose nvidia_uvm kernel module
@@ -52,12 +53,22 @@ RUN update-alternatives --install  /usr/bin/gcc gcc /usr/bin/gcc-${GCC_VER} 10
 #different urls for differnt versions. thx nvidia!
 #if not caring about cuda
 #RUN if [ "${CUDA_VER1}" -ge 7 ] && [ "${DRIVER_VER}" = "CUDA" ]
-#todo: break up long lines  
-RUN if [ "${CUDA_VER1}" -ge 7 ] ; then curl http://developer.download.nvidia.com/compute/cuda/${CUDA_VER1}_${CUDA_VER2}/Prod/local_installers/cuda_${CUDA_VER1}.${CUDA_VER2}.${CUDA_VER3}_linux.run \
-    > /opt/nvidia/cuda.run ; fi
+RUN if [ "${CUDA_VER1}" -ge 7 ] ; \
+then \
+curl http://developer.download.nvidia.com/compute/cuda/\
+${CUDA_VER1}_${CUDA_VER2}/\
+Prod/local_installers/\
+cuda_${CUDA_VER1}.${CUDA_VER2}.${CUDA_VER3}_linux.run \
+    > /opt/nvidia/cuda.run ;\
+fi
 #RUN if [ "${CUDA_VER1}" -lt 7 ] && [ "${DRIVER_VER}" = "CUDA" ]
-RUN if [ "${CUDA_VER1}" -lt 7 ] ; then curl http://developer.download.nvidia.com/compute/cuda/${CUDA_VER1}_${CUDA_VER2}/rel/installers/cuda_${CUDA_VER1}.${CUDA_VER2}.${CUDA_VER3}_linux_64.run \
-    > /opt/nvidia/cuda.run ; fi
+RUN if [ "${CUDA_VER1}" -lt 7 ] ; \
+then curl http://developer.download.nvidia.com/compute/cuda/\
+${CUDA_VER1}_${CUDA_VER2}/\
+rel/installers/\
+cuda_${CUDA_VER1}.${CUDA_VER2}.${CUDA_VER3}_linux_64.run \
+    > /opt/nvidia/cuda.run ;\
+fi
 
 
 # Download driver
@@ -65,45 +76,18 @@ RUN if [ "${CUDA_VER1}" -lt 7 ] ; then curl http://developer.download.nvidia.com
 # as of CUDA 7.0.28
 
 RUN mkdir -p /opt/nvidia
-RUN if [ "$DRIVER_VER" != "CUDA" ]; then curl  http://us.download.nvidia.com/XFree86/Linux-x86_64/${DRIVER_VER}/NVIDIA-Linux-x86_64-${DRIVER_VER}.run \
+RUN if [ "$DRIVER_VER" != "CUDA" ]; \
+then curl  http://us.download.nvidia.com/XFree86/Linux-x86_64/\
+${DRIVER_VER}/\
+NVIDIA-Linux-x86_64-${DRIVER_VER}.run \
     > /opt/nvidia/driver.run ; fi
 
-
-# Download kernel source and prepare modules
-
-#todo: this block could be moved to install_nvidia.
-#it has host OS specific instructions. so if moved
-#we can achieve 'build anywhere run one specific machine'
-WORKDIR /usr/src/kernels
-RUN curl https://www.kernel.org/pub/linux/kernel/v`uname -r | grep -o '^[0-9]'`.x/linux-`uname -r | grep -o '[0-9].[0-9].[0-9]'`.tar.xz \
-    > linux.tar.xz
-RUN mkdir linux
-RUN tar -xvf linux.tar.xz -C linux --strip-components=1
-WORKDIR linux
-RUN  zcat /proc/config.gz > .config
-RUN make modules_prepare
-RUN echo "#define UTS_RELEASE \"$(uname -r)\"" \
-    > include/generated/utsrelease.h
-
-
-# Nvidia drivers setup
-
 WORKDIR /opt/nvidia
-RUN echo "if [ "$DRIVER_VER" = "CUDA" ]; then chmod +x ./cuda.run && ./cuda.run --silent --driver --kernel-source-path=/usr/src/kernels/linux/ && modprobe nvidia ; else  chmod +x driver.run && ./driver.run -q -a -n -s --kernel-source-path=/usr/src/kernels/linux/ && modprobe nvidia ; fi" >> install_nvidia  \
-    && chmod +x install_nvidia
-#todo: install with --compat32-libdir?
-
-# Nvidia CUDA setup
-
-RUN echo "chmod +x cuda.run && ./cuda.run --silent --toolkit --samples" \
-    >> install_nvidia
-
-# run samples setup
-
-RUN echo "cd /usr/local/cuda/samples/1_Utilities/deviceQuery && make && ./deviceQuery" \
-    >> install_nvidia
-
-CMD /opt/nvidia/install_nvidia
+COPY install_nvidia.sh /opt/nvidia/install_nvidia.sh
+RUN chmod +x ./install_nvidia.sh
+RUN chmod +x ./cuda.run
+RUN chmod +x ./driver.run
+CMD /opt/nvidia/install_nvidia.sh
 
 
 # Common stuff
@@ -116,15 +100,26 @@ ONBUILD RUN chmod +x driver.run
 #..and (not the kernel module)
 #opengl support gives an error (not installed?) but the driver
 #install may work anyways
-ONBUILD RUN ./driver.run --silent --no-kernel-module --no-unified-memory --no-opengl-files
+ONBUILD RUN ./driver.run \
+	    	--silent \
+		--no-kernel-module \
+		--no-unified-memory \
+		--no-opengl-files
 #the samples take space but are a great way to chk cuda
 #you could remove --samples
-ONBUILD RUN ./cuda.run --toolkit --samples --silent
+ONBUILD RUN ./cuda.run \
+	    	--toolkit \
+		--samples \
+		--silent
 
 # setup stuff
 ONBUILD ENV PATH=/usr/local/cuda/bin:$PATH
 ONBUILD ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
+ONBUILD RUN echo "/usr/local/cuda/lib64" \
+	    	> /etc/ld.so.conf.d/cuda.conf && \
+		  ldconfig
 
+# 
 ONBUILD WORKDIR /root
 ONBUILD CMD /bin/bash
 
