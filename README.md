@@ -31,7 +31,7 @@ NV_DEVICES=$(sudo ./coreos-nvidia/devices/nvidia_devices.sh)
 docker run -ti $NV_DEVICES cuda-app
 ```
 
-You can start over just by removing the modules `sudo rmmod nvidia_uvm&& sudo rmmod nvidia` and building again (`rmomod` might not be necessary since the driver installation removes the older driver but I haven't checked).
+You can start over just by removing the modules `sudo rmmod nvidia_uvm && sudo rmmod nvidia` and building again (`rmomod` might not be necessary since the driver installation removes the older driver but I haven't checked).
 
 
 ## Notes
