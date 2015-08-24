@@ -40,6 +40,4 @@ There may be a better base image, and some post build cleanup that could be done
 
 Currently the build uses `uname -r` to detect the running kernel version.  There maybe be a better way to do this that offers more flexibility.
 
-
-
-todo: commentatry in my blog post
+[General Comments](http://msdresearch.blogspot.com/2015/08/run-cuda-applications-on-coreos.html)
