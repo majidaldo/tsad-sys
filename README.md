@@ -20,7 +20,7 @@ i2c_core               45056  3 i2c_i801,ipmi_ssif,nvidia
 
 ## Usage
 
-To make use of CUDA in a docker container, you must recreate the installation environment in the container. The Dockerfile contains instructions to recreate the environment if it is used as a base for other images (You could also just modify the Dockerfile itself or enter the installation container.). Just insert `FROM nvidia` at the beginning of your Dockerfile.
+To make use of CUDA in a docker container, you must recreate the installation environment in the container. The Dockerfile contains instructions to recreate the environment if it is used as a base for other images. Just insert `FROM nvidia` at the beginning of your CUDA application Dockerfile (You could also just modify the 'installation' Dockerfile itself or enter the installation container.). 
 
 You can also use some  containerized CUDA-enabled applications built by others. As (a tested) example, you can run CUDA-enabled [Theano](https://github.com/Kaixhin/dockerfiles/blob/master/cuda-theano/cuda_v7.0/Dockerfile) if the `FROM` instruction is changed to `FROM nvidia`.
 
