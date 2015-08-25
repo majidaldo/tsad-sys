@@ -7,12 +7,12 @@ MAINTAINER Majid alDosari
 
 # Setup environment
 
-#for cuda 6 use gcc 4.7
-ENV CUDA_GCC_VER 4.7
+#for cuda 7 use gcc 4.8>
+ENV CUDA_GCC_VER 4.9
 
-ENV CUDA_VER1 6
-ENV CUDA_VER2 5
-ENV CUDA_VER3 14
+ENV CUDA_VER1 7
+ENV CUDA_VER2 0
+ENV CUDA_VER3 28
 
 ENV DRIVER_VER 355.06
 
