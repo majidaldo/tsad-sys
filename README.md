@@ -20,9 +20,9 @@ i2c_core               45056  3 i2c_i801,ipmi_ssif,nvidia
 
 To make use of CUDA in a docker container, you must recreate the installation environment in the container. The Dockerfile contains instructions to recreate the environment if it is used as a base for other images. Just insert `FROM nvidia` at the beginning of your CUDA application Dockerfile (You could also just modify the 'installation' Dockerfile itself or enter the installation container.). 
 
-You can also use some  containerized CUDA-enabled applications built by others. As (a tested) example, you can run CUDA-enabled [Theano](https://github.com/Kaixhin/dockerfiles/blob/master/cuda-theano/cuda_v7.0/Dockerfile) if the `FROM` instruction is changed to `FROM nvidia`.
+You can also use some  containerized CUDA-enabled applications built by others. As a (tested) example, you can run CUDA-enabled [Theano](https://github.com/Kaixhin/dockerfiles/blob/master/cuda-theano/cuda_v7.0/Dockerfile) if the `FROM` instruction is changed to `FROM nvidia`.
 
-After building the CUDA application image, run it passing NVIDIA devices. [This](https://gist.github.com/majidaldo/87d6a4c58df07f69b269) script will generate a device list in a format suitable for use with `docker run` options. Is also creates NVIDIA devices on the host so it has to run with escalated privileges (sudo).
+After building the CUDA application image, run it passing NVIDIA devices. [This](https://gist.github.com/majidaldo/87d6a4c58df07f69b269) script will generate a device list in a format suitable for use with `docker run` options. It also creates NVIDIA devices on the host so it has to run with escalated privileges (sudo).
 ```
 docker build -t cuda-app ./cuda-app
 NV_DEVICES=$(sudo ./coreos-nvidia/devices/nvidia_devices.sh)
