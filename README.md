@@ -7,10 +7,10 @@ It should be built on a machine running the same CoreOS version as the target ma
 
 The purpose of the steps in this section is to load the NVIDIA drivers.
 
-Build: `docker build -t nvidia github.com/majidaldo/coreos-nvidia`<br>
-Run: `docker run --rm --privileged nvidia`<br>
-You should see your NVIDIA harware printed.<br>
-Confirm module is loaded: `lsmod | grep -i nvidia`<br>
+1. Build: `docker build -t nvidia github.com/majidaldo/coreos-nvidia`<br>
+2. Run: `docker run --rm --privileged nvidia`<br>
+   You should see your NVIDIA harware printed.<br>
+3. Confirm module is loaded: `lsmod | grep -i nvidia`<br>
 You should see:
 ```
 nvidia_uvm             77824  0
