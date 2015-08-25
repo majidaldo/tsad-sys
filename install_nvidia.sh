@@ -14,6 +14,20 @@ linux-`uname -r | grep -o '[0-9].[0-9].[0-9]'`.tar.xz \
 mkdir linux
 tar -xvf linux.tar.xz -C linux --strip-components=1
 
+
+# set gcc version used to compile kernel
+
+DRIVER_GCC_VER=$(grep -o -e 'gcc version [0-9].[0-9]' /proc/version | \
+		 sed 's/gcc version //')
+apt-get update
+apt-get install -y gcc-${DRIVER_GCC_VER} g++-${DRIVER_GCC_VER}
+update-alternatives --install \
+		    /usr/bin/gcc gcc /usr/bin/gcc-${DRIVER_GCC_VER} 60 \
+		    --slave \
+		    /usr/bin/g++ g++ /usr/bin/g++-${DRIVER_GCC_VER}
+#print gcc ver to check
+update-alternatives --config gcc
+
 #prepare source for modules
 
 cd linux
@@ -46,10 +60,18 @@ modprobe nvidia
 
 # Nvidia CUDA setup
 
+#use proper gcc
+update-alternatives --remove gcc /usr/bin/gcc-${DRIVER_GCC_VER}
+update-alternatives --install \
+		    /usr/bin/gcc gcc /usr/bin/gcc-${CUDA_GCC_VER} 60 \
+		    --slave \
+		    /usr/bin/g++ g++ /usr/bin/g++-${CUDA_GCC_VER}
+#print gcc ver to check
+update-alternatives --config gcc
 chmod +x cuda.run
 ./cuda.run --silent --toolkit --samples
 
-# run samples setup
+# run samples setup (again.just to get kenerl module nvidia_uvm!)
 
 cd /usr/local/cuda/samples/1_Utilities/deviceQuery
 make

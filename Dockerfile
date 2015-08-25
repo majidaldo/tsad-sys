@@ -7,14 +7,10 @@ MAINTAINER Majid alDosari
 
 # Setup environment
 
-#restricted by gcc that was used to compile the kernel
-#as of Aug '15, coreos kernel was compiled with gcc 4.8
-#this is further complicated by compiler requirements
-#of CUDA. todo: anyway to decouple this??
 #for cuda 6
-#ENV GCC_VER 4.7
-#for cuda 7
-ENV GCC_VER 4.8
+#ENV CUDA_GCC_VER 4.7
+#for cuda 7, 4.8 (or higher?)
+ENV CUDA_GCC_VER 4.8
 
 ENV CUDA_VER1 7
 ENV CUDA_VER2 0
@@ -23,26 +19,28 @@ ENV CUDA_VER3 28
 #ENV CUDA_VER2 5
 #ENV CUDA_VER3 14
 ENV DRIVER_VER 355.06
-#ENV DRIVER_VER 352.21
+
 #todo: make a check for driver download existence
 #installing the driver from cuda does not work
 #maybe bc driver in cuda cant install in 4.x kernel
 #ENV DRIVER_VER CUDA
 #'CUDA' means whatever driver came with CUDA
-#todo: make tags of format DRIVER_VER-CUDA_VERy
-
+#todo: make tags for CUDA version
 
 RUN apt-get -y update && apt-get -y install \
-    gcc-${GCC_VER} g++-${GCC_VER} \
+    gcc-${CUDA_GCC_VER} g++-${CUDA_GCC_VER} \
     wget curl git make dpkg-dev module-init-tools && \
     mkdir -p /usr/src/kernels && \
     mkdir -p /opt/nvidia && \
     apt-get autoremove && apt-get clean
 # Ensure we're using gcc version GCC_VER
-#todo: why is this here? not needed?
-#i didn't install any other compiler.
-#RUN update-alternatives --install  /usr/bin/gcc gcc /usr/bin/gcc-${GCC_VER} 10
-#RUN update-alternatives --install  /usr/bin/gcc gcc /usr/bin/gcc-${GCC_VER} 10
+RUN update-alternatives --install \
+            /usr/bin/gcc gcc /usr/bin/gcc-${CUDA_GCC_VER} 60 \
+            --slave \
+            /usr/bin/g++ g++ /usr/bin/g++-${CUDA_GCC_VER}
+#print gcc ver to check
+RUN update-alternatives --config gcc
+
 
 # Download CUDA
 # downloading CUDA JUST to expose nvidia_uvm kernel module
