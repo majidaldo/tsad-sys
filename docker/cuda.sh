@@ -3,10 +3,11 @@ set -e
 
 tag=${1:-master}
 
-cd nvidia
+cd `ls -d docker/*cuda`
 git checkout $tag
 cd ..
 
-docker build -t cuda nvidia/
+docker build -t base `ls -d docker/*base`
+docker build -t cuda `ls -d docker/*cuda`
 docker run --privileged --rm cuda
 
