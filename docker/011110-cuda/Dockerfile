@@ -1,6 +1,4 @@
-## -*- docker-image-name: "nvidia" -*-
-
-FROM ubuntu:15.04
+FROM theanets
 MAINTAINER Majid alDosari
 
 
