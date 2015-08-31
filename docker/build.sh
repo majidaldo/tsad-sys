@@ -36,4 +36,4 @@ done
 
 #since i'm remounting /var/lib/docker no need to repull stuff from registry
 #extra. only the 'base' images should be left
-#docker rmi $(docker images -q) | :
+docker rmi $(docker images -q) | :
