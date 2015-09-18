@@ -5,6 +5,10 @@ cd $SCRIPT_DIR
 
 
 ./vagrant up  --no-provision
+./vagrant provision --provision-with \
+	  "create swapfile"
+./vagrant provision --provision-with \
+	  "add hosts file"
 
 
 ./vagrant provision --provision-with \
