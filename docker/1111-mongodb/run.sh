@@ -9,10 +9,10 @@ dd=/home/core/vld/db
 sudo mkdir -p $dd
 cd $dd
 
-docker stop db | :
-docker rm   db | :
+docker stop mongodb | :
+docker rm   mongodb | :
 docker run \
-       --name db \
+       --name mongodb \
        --dns 8.8.8.8 \
        -d \
        -v `pwd`:/data/db \
