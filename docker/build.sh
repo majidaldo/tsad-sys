@@ -30,7 +30,7 @@ do
     docker tag    $name  $REGISTRY_HOST/$name
     docker push          $REGISTRY_HOST/$name
     docker rmi           $REGISTRY_HOST/$name
-    #docker rmi                          $name
+    docker rmi                          $name
 done
 
 
