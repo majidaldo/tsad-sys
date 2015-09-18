@@ -16,4 +16,5 @@ docker run \
        --dns 8.8.8.8 \
        -d \
        -v `pwd`:/data/db \
+       -p 27017:27017 \
        registry:5000/mongodb
