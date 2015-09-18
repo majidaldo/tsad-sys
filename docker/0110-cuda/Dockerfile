@@ -1,18 +1,17 @@
-FROM theanets
+FROM registry:5000/base
 MAINTAINER Majid alDosari
-
 
 
 # Setup environment
 
 #for cuda 7 use gcc 4.8>
-ENV CUDA_GCC_VER 4.9
+ENV CUDA_GCC_VER 4.8
 
 ENV CUDA_VER1 7
-ENV CUDA_VER2 0
-ENV CUDA_VER3 28
+ENV CUDA_VER2 5
+ENV CUDA_VER3 18
 
-ENV DRIVER_VER 355.06
+ENV DRIVER_VER 355.11
 
 #todo: make a check for driver download existence
 #installing the driver from cuda does not work
@@ -28,7 +27,7 @@ RUN apt-get -y update && apt-get -y install \
     apt-get autoremove && apt-get clean
 # Ensure we're using gcc version GCC_VER
 RUN update-alternatives --install \
-            /usr/bin/gcc gcc /usr/bin/gcc-${CUDA_GCC_VER} 60 \
+            /usr/bin/gcc gcc /usr/bin/gcc-${CUDA_GCC_VER} 100 \
             --slave \
             /usr/bin/g++ g++ /usr/bin/g++-${CUDA_GCC_VER}
 #print gcc ver to check
@@ -40,14 +39,21 @@ RUN update-alternatives --config gcc
 # by running devicequery from samples
 # todo: do i have to install the samples?
 
-
 #different urls for differnt versions. thx nvidia!
 #if not caring about cuda
 #RUN if [ "${CUDA_VER1}" -ge 7 ] && [ "${DRIVER_VER}" = "CUDA" ]
-RUN if [ "${CUDA_VER1}" -ge 7 ] ; \
+RUN if [ "${CUDA_VER1}" -ge 7 ] && [ "${CUDA_VER2}" -eq 0 ] ; \
 then \
 curl http://developer.download.nvidia.com/compute/cuda/\
 ${CUDA_VER1}_${CUDA_VER2}/\
+Prod/local_installers/\
+cuda_${CUDA_VER1}.${CUDA_VER2}.${CUDA_VER3}_linux.run \
+    > /opt/nvidia/cuda.run ;\
+fi
+RUN if [ "${CUDA_VER1}" -ge 7 ] && [ "${CUDA_VER2}" -ge 5 ] ; \
+then \
+curl http://developer.download.nvidia.com/compute/cuda/\
+${CUDA_VER1}.${CUDA_VER2}/\
 Prod/local_installers/\
 cuda_${CUDA_VER1}.${CUDA_VER2}.${CUDA_VER3}_linux.run \
     > /opt/nvidia/cuda.run ;\
@@ -113,4 +119,3 @@ ONBUILD RUN echo "/usr/local/cuda/lib64" \
 # 
 ONBUILD WORKDIR /root
 ONBUILD CMD /bin/bash
-
