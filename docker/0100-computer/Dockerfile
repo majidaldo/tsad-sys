@@ -23,7 +23,7 @@ RUN conda install -y ipython-notebook
 # spearmint
 
 WORKDIR /root
-RUN git clone https://github.com/HIPS/Spearmint.git spearmint
+RUN git clone https://github.com/majidaldo/Spearmint.git spearmint
 #                 why backslash???
 RUN pip install -e \spearmint
 RUN conda install -y pymongo
@@ -46,11 +46,20 @@ RUN pip install climate
 WORKDIR theanets
 RUN python setup.py develop
 
+# support
 
+RUN pip install dataset
+RUN conda install -y ipyparallel
 
 #i'm running weave so this wont matter
 EXPOSE 8888
 COPY cmd.sh /root/cmd.sh
+
 WORKDIR /data
 CMD /root/cmd.sh
 
+RUN mkdir -p /root/.jupyter
+RUN mkdir -p /root/.ipython
+COPY jupyter_notebook_config.py /root/.jupyter/jupyter_notebook_config.py
+
+VOLUME /root/.ipython

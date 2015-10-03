@@ -1,3 +1,12 @@
 #!/bin/sh
 cd /data
-ipython notebook --ip=0.0.0.0 --no-browser
+
+for i in {1..`nproc`}
+do
+    ipengine
+done
+#ipython notebook --ip=* --no-browser 
+
+
+
+

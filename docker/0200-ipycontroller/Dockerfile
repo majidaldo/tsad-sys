@@ -1,0 +1,17 @@
+FROM registry:5000/base
+
+WORKDIR /root
+RUN curl https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh > conda.sh
+RUN chmod +x conda.sh
+RUN bash ./conda.sh -b -p /root/conda
+RUN rm conda.sh
+ENV PATH /root/conda/bin:$PATH
+
+RUN conda install -y ipyparallel
+
+WORKDIR /root
+COPY cmd.sh /root/cmd.sh
+VOLUME /root/.ipython
+
+CMD /root/cmd.sh
+EXPOSE 4321
