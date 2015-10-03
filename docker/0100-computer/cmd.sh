@@ -1,10 +1,7 @@
 #!/bin/sh
 cd /data
 
-for i in {1..`nproc`}
-do
-    ipengine
-done
+ipengine
 #ipython notebook --ip=* --no-browser 
 
 
