@@ -5,13 +5,16 @@ source ../../common.src
 
 
 dd=`$ENVCMD PROJECT_DIR`/tsad
-dipy=`$ENVCMD PROJECT_FILES`.ipython #some weird prob w/ dot!
-djpy=`$ENVCMD PROJECT_FILES`.jupyter
+dipy=`$ENVCMD PROJECT_FILES`/.ipython 
+djpy=`$ENVCMD PROJECT_FILES`/.jupyter
 
-mkdir -p ${djpy}/runtime
-mkdir -p ${dipy}/profile_default
-cp ipython_config.py ${dipy}/profile_default/
-cp jupyter_notebook_config.py ${djpy}/jupyter_notebook_config.py
+ls $djpy |: #coaxes the f/s to be ok ..
+ls $dipy |: #..with the dot dirs!!!!!!!!!!!
+#WHY WHY WHY WHY WHY?!?!?!?!?!?!?!?!?!
+mkdir -p ${djpy}/runtime              
+mkdir -p ${dipy}/profile_default              
+cp ipython_config.py ${dipy}/profile_default
+cp jupyter_notebook_config.py ${djpy}
 
 app=${1-ipyengine}
 n=${2-1}
