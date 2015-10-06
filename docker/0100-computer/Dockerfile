@@ -55,6 +55,7 @@ RUN conda install -y psutil
 
 #i'm running weave so this wont matter
 EXPOSE 8888
+
 COPY ipykernel.sh    /root/ipykernel
 COPY ipyengine.sh    /root/ipyengine
 COPY ipynotebook.sh  /root/ipynotebook
