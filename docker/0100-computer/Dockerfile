@@ -1,5 +1,5 @@
 FROM registry:5000/base
-
+RUN apt-get update
 
 WORKDIR /root
 RUN curl https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh > conda.sh
@@ -49,17 +49,24 @@ RUN python setup.py develop
 # support
 
 RUN pip install dataset
+RUN pip install lockfile
 RUN conda install -y ipyparallel
+RUN conda install -y psutil
 
 #i'm running weave so this wont matter
 EXPOSE 8888
-COPY cmd.sh /root/cmd.sh
+COPY ipykernel.sh    /root/ipykernel
+COPY ipyengine.sh    /root/ipyengine
+COPY ipynotebook.sh  /root/ipynotebook
+copy ipython.sh      /root/ipython
+RUN echo "/usr/bin/bash" > /root/bash
 
 WORKDIR /data
-CMD /root/cmd.sh
+CMD /root/ipykernel.sh
 
 RUN mkdir -p /root/.jupyter
 RUN mkdir -p /root/.ipython
-COPY jupyter_notebook_config.py /root/.jupyter/jupyter_notebook_config.py
+
 
 VOLUME /root/.ipython
+VOLUME /root/.jupyter
