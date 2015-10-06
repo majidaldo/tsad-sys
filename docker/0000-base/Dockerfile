@@ -1,5 +1,5 @@
 FROM ubuntu:15.10
-
+ENV TERM xterm
 RUN apt-get -y update
 
 RUN apt-get install -y curl
