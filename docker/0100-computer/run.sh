@@ -5,10 +5,11 @@ source ../../common.src
 
 
 dd=`$ENVCMD PROJECT_DIR`/tsad
-dipy=`$ENVCMD PROJECT_FILES`/.ipython
-djpy=`$ENVCMD PROJECT_FILES`/.jupyter
-mkdir -p ${dipy}/profile_default
+dipy=`$ENVCMD PROJECT_FILES`.ipython #some weird prob w/ dot!
+djpy=`$ENVCMD PROJECT_FILES`.jupyter
+
 mkdir -p ${djpy}/runtime
+mkdir -p ${dipy}/profile_default
 cp ipython_config.py ${dipy}/profile_default/
 cp jupyter_notebook_config.py ${djpy}/jupyter_notebook_config.py
 
