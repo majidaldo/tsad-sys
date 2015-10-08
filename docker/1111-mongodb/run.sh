@@ -5,7 +5,7 @@ source ../../common.src
 
 
 #dd=`$ENVCMD PROJECT_FILES`/db
-dd=/home/core/vld/db
+dd=/home/core/fs/db
 sudo mkdir -p $dd
 cd $dd
 

@@ -29,7 +29,7 @@ docker run --name `hostname`-${app}-$i \
        -v ${dd}:/data \
        -v ${dipy}:/root/.ipython \
        -v ${djpy}:/root/.jupyter \
-       -v /home/core/vld/db:/db \
+       -v /home/core/fs/db:/db \
        -e JUPYTER_RUNTIME_DIR=/root/.jupyter/runtime \
        registry:5000/computer /root/${app}
 done
