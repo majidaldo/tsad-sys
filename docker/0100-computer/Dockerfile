@@ -26,7 +26,6 @@ WORKDIR /root
 RUN git clone https://github.com/majidaldo/Spearmint.git spearmint
 #                 why backslash???
 RUN pip install -e \spearmint
-RUN conda install -y pymongo
 
 
 # theano
@@ -48,10 +47,9 @@ RUN python setup.py develop
 
 # support
 
-RUN pip install dataset
-RUN pip install lockfile
 RUN conda install -y ipyparallel
 RUN conda install -y psutil
+RUN pip install pymongo
 
 #i'm running weave so this wont matter
 EXPOSE 8888
