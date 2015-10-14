@@ -5,6 +5,7 @@ source ../../common.src
 
 
 dd=`$ENVCMD PROJECT_FILES`/.ipython
+ls $dd |:
 mkdir -p $dd
 ls $dd |: #??why do i have to do this?
 cp ipcontroller_config.py ${dd}/profile_default/ipcontroller_config.py
