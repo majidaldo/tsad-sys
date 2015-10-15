@@ -25,11 +25,11 @@ docker stop       `hostname`-${app}-$i | :
 docker rm         `hostname`-${app}-$i | :
 docker run --name `hostname`-${app}-$i \
        -d \
-       --dns 8.8.8.8 \
        -v ${dd}:/data \
        -v ${dipy}:/root/.ipython \
        -v ${djpy}:/root/.jupyter \
        -v /home/core/fs/db:/db \
        -e JUPYTER_RUNTIME_DIR=/root/.jupyter/runtime \
        registry:5000/computer /root/${app}
+#       --dns 8.8.8.8 \
 done
