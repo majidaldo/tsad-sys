@@ -1,7 +1,10 @@
 #!/bin/bash
-set -e
+#set -e
 
-docker run -it --rm \
+docker rm -f mongo-express
+docker run -d  \
 	--name mongo-express \
-	--link web_db_1:mongo \
-	knickers/mongo-express "$@"
+	--link mongodb:mongo \
+	-e ME_CONFIG_MONGODB_SERVER='mongodb' \
+	-p 127.0.0.1:8081:8081 \
+	mongo-express "$@"
