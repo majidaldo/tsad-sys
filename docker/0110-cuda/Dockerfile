@@ -5,13 +5,14 @@ MAINTAINER Majid alDosari
 # Setup environment
 
 #for cuda 7 use gcc 4.8>
-ENV CUDA_GCC_VER 4.8
+ENV CUDA_GCC_VER 4.9
 
 ENV CUDA_VER1 7
 ENV CUDA_VER2 5
 ENV CUDA_VER3 18
 
-ENV DRIVER_VER 355.11
+#jan. 5, 2016
+ENV DRIVER_VER 361.16
 
 #todo: make a check for driver download existence
 #installing the driver from cuda does not work
@@ -21,13 +22,14 @@ ENV DRIVER_VER 355.11
 
 RUN apt-get -y update && apt-get -y install \
     gcc-${CUDA_GCC_VER} g++-${CUDA_GCC_VER} \
+    libssl-dev bc \
     wget curl git make dpkg-dev module-init-tools && \
     mkdir -p /usr/src/kernels && \
     mkdir -p /opt/nvidia && \
     apt-get autoremove && apt-get clean
 # Ensure we're using gcc version GCC_VER
 RUN update-alternatives --install \
-            /usr/bin/gcc gcc /usr/bin/gcc-${CUDA_GCC_VER} 100 \
+            /usr/bin/gcc gcc /usr/bin/gcc-${CUDA_GCC_VER} 60 \
             --slave \
             /usr/bin/g++ g++ /usr/bin/g++-${CUDA_GCC_VER}
 #print gcc ver to check

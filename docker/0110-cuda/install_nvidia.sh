@@ -22,11 +22,11 @@ DRIVER_GCC_VER=$(grep -o -e 'gcc version [0-9].[0-9]' /proc/version | \
 apt-get update
 apt-get install -y gcc-${DRIVER_GCC_VER} g++-${DRIVER_GCC_VER}
 update-alternatives --install \
-		    /usr/bin/gcc gcc /usr/bin/gcc-${DRIVER_GCC_VER} 100 \
+		    /usr/bin/gcc gcc /usr/bin/gcc-${DRIVER_GCC_VER} 60 \
 		    --slave \
 		    /usr/bin/g++ g++ /usr/bin/g++-${DRIVER_GCC_VER}
 #print gcc ver to check
-update-alternatives --config gcc
+update-alternatives --set gcc "/usr/bin/gcc-${DRIVER_GCC_VER}"
 
 #prepare source for modules
 
