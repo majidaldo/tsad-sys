@@ -1,7 +1,7 @@
 FROM registry:5000/base
 
 WORKDIR /root
-RUN curl https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh > conda.sh
+RUN curl https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh > conda.sh
 RUN chmod +x conda.sh
 RUN bash ./conda.sh -b -p /root/conda
 RUN rm conda.sh
