@@ -1,4 +1,4 @@
-FROM ubuntu:15.10
+FROM ubuntu:15.04
 ENV TERM xterm
 RUN apt-get -y update
 
