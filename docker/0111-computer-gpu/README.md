@@ -12,3 +12,4 @@ docker names:
 `hostname`-gpu-app- etc.
 and run cmd
 registry:5000/computer-gpu
+and the nvidia devices line
