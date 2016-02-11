@@ -7,3 +7,6 @@
 [submodule "docker/nvidia"]
 	path = docker/nvidia
 	url = https://github.com/majidaldo/coreos-nvidia.git
+[submodule "tsad"]
+	path = tsad
+	url = git@github.com:majidaldo/tsad
